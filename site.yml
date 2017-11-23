@@ -1,0 +1,31 @@
+#
+#
+#Playbook for Multi Tier Application Installation
+
+- name: Collect facts
+  hosts: jumpbox
+  become: yes
+  roles:
+    - osp-facts
+
+- name: Setup Load Balancer Tier
+  hosts: frontends
+  become: yes
+  roles:
+    - {name: base-config, tags: base-config}
+    - {name: lb-tier, tags: [lbs,haproxy]}
+
+- name: Setup Application Servers
+  hosts: apps
+  become: yes
+  roles:
+    - {name: base-config, tags: base-config}
+    - {name: app-tier, tags: [apps,tomcat]}
+
+- name: Setup Postgresql Database Server
+  hosts: appdbs 
+  become: yes
+  roles:
+    - {name: base-config, tags: base-config}
+    - {name: db-tier, tags: [appdbs,postgre]}
+ 
