@@ -2,6 +2,13 @@
 # tasks file for base-config
 #
 #
+- name: enable sudo without tty for some ansible commands
+  replace:
+    path: /etc/sudoers
+    regexp: '^Defaults\s*requiretty'
+    replace: 'Defaults  !requiretty'
+    backup: yes
+    
 - name: Configure Yum Repository on all servers
   template:
     src: open_three-tier-app.repo.j2
